@@ -1,0 +1,140 @@
+import React, { useMemo } from 'react';
+import { Link } from 'react-router-dom';
+import { ShoppingCart, Heart, Star } from 'lucide-react';
+import { useCart } from '../context/CartContext.jsx';
+
+const formatPrice = (v) => `$${(Number(v) || 0).toFixed(2)}`;
+
+const ProductCard = ({ product }) => {
+  const { addItem } = useCart();
+
+  const to = `/shop/${product.id}`;
+  const image = useMemo(
+    () =>
+      product.image ||
+      product.imageUrl ||
+      (Array.isArray(product.images) ? product.images[0] : null) ||
+      null,
+    [product]
+  );
+
+  const price = product.price;
+  const compareAt = product.compareAtPrice || product.oldPrice;
+  const hasDiscount = compareAt && Number(compareAt) > Number(price);
+  const rating = Number(product.rating) || 0;
+
+  return (
+    <article
+      role="article"
+      aria-labelledby={`prod-${product.id}-title`}
+      className="group relative rounded-2xl border border-gray-100 bg-white/80 backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:ring-1 hover:ring-green-200 overflow-hidden"
+    >
+      <button
+        type="button"
+        title="Add to wishlist"
+        className="absolute right-3 top-3 z-10 inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-gray-600 shadow-md ring-1 ring-gray-200 transition hover:scale-105 hover:text-rose-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-400"
+        onClick={(e) => { e.stopPropagation(); e.preventDefault(); /* wishlist logic */ }}
+        aria-label="Add to wishlist"
+      >
+        <Heart className="h-5 w-5" />
+      </button>
+
+      <Link to={to} className="block" aria-label={`View details for ${product.name || product.title}`}>
+        <div className="relative h-56 w-full overflow-hidden bg-gray-50">
+          {image ? (
+            <img
+              src={image}
+              alt={product.name || product.title || 'Product image'}
+              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              loading="lazy"
+              decoding="async"
+            />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-green-100 to-green-200 text-green-700">
+              <span className="text-sm font-medium">No image</span>
+            </div>
+          )}
+
+          <div className="absolute left-3 top-3 flex items-center gap-2">
+            {hasDiscount && (
+              <span className="rounded-full bg-rose-500 px-2.5 py-1 text-xs font-semibold text-white shadow">
+                Sale
+              </span>
+            )}
+            {(product.badge || product.featured) && (
+              <span className="rounded-full bg-green-600/90 px-2.5 py-1 text-xs font-semibold text-white shadow">
+                {product.badge || 'Featured'}
+              </span>
+            )}
+          </div>
+
+          <div className="pointer-events-none absolute inset-x-3 bottom-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+            <div className="pointer-events-auto flex overflow-hidden rounded-xl shadow-lg">
+              <button
+                type="button"
+                className="flex-1 bg-green-600 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-green-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500"
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); addItem(product, 1); }}
+                title="Add to cart"
+                aria-label={`Add ${product.name || 'product'} to cart`}
+              >
+                Add to cart
+              </button>
+              <Link
+                to={to}
+                className="inline-flex items-center gap-2 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 ring-1 ring-inset ring-gray-200"
+                title="View details"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <ShoppingCart className="h-4 w-4" />
+                Details
+              </Link>
+            </div>
+          </div>
+        </div>
+      </Link>
+
+      <div className="p-4">
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <Link
+              to={to}
+              id={`prod-${product.id}-title`}
+              className="line-clamp-1 text-base font-semibold text-gray-900 hover:text-green-700 block"
+              title={product.name || product.title}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {product.name || product.title || 'Product'}
+            </Link>
+            {product.category && (
+              <p className="mt-0.5 text-xs text-gray-500">{product.category}</p>
+            )}
+          </div>
+
+          {Number.isFinite(rating) && (
+            <div className="flex items-center gap-1" aria-hidden>
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Star
+                  key={i}
+                  className={`h-4 w-4 ${i < Math.round(rating) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
+                  aria-hidden
+                />
+              ))}
+              <span className="ml-1 text-xs text-gray-500">{rating}</span>
+            </div>
+          )}
+        </div>
+
+        <div className="mt-3 flex items-center gap-2">
+          <p className="text-lg font-bold text-gray-900">{formatPrice(price)}</p>
+          {hasDiscount && (
+            <p className="text-sm font-medium text-gray-400 line-through">
+              {formatPrice(compareAt)}
+            </p>
+          )}
+        </div>
+      </div>
+    </article>
+  );
+};
+
+export default React.memo(ProductCard);
