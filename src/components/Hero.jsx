@@ -1,34 +1,37 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronRight, Star, Truck, Shield, Leaf } from 'lucide-react';
+import { ChevronRight, Truck, Shield, Leaf } from 'lucide-react';
 import { companyInfo } from '../data/company.js';
 
-const Hero = () => {
+const Hero = React.memo(() => {
   const [currentImage, setCurrentImage] = useState(0);
+
+  // Pre-compute heroImages with useMemo (avoid recalculation on re-render)
+  const heroImages = useMemo(() => companyInfo.heroImages, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentImage((prev) => (prev + 1) % companyInfo.heroImages.length);
+      setCurrentImage((prev) => (prev + 1) % heroImages.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [heroImages.length]);
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center overflow-hidden">
+    <section id="home" className="relative min-h-screen flex items-center overflow-hidden py-20">
       {/* Background Images with Parallax Effect */}
       <div className="absolute inset-0 z-0">
-        {companyInfo.heroImages.map((image, index) => (
+        {heroImages.map((image, index) => (
           <div
             key={index}
-            className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ${
+            className={`absolute z-0 inset-0 bg-cover bg-center transition-opacity duration-1000 ${
               currentImage === index ? 'opacity-100' : 'opacity-0'
             }`}
             style={{ backgroundImage: `url(${image})` }}
           />
         ))}
-        <div className="absolute inset-0 bg-gradient-to-r from-green-900/80 via-green-800/60 to-green-900/80" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-green-900/40" />
       </div>
+
+      <div className="absolute w-full h-full z-10 bg-gradient-to-r from-green-900/80 via-green-800/60 to-green-900/80" />
 
       {/* Floating Elements Animation */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -38,16 +41,16 @@ const Hero = () => {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-20">
         <div className="max-w-4xl mx-auto">
           {/* Badge */}
-          <div className="inline-flex items-center px-4 py-2 bg-green-500/20 border border-green-400/30 rounded-full text-green-100 text-sm font-medium mb-8 backdrop-blur-sm">
+          <div className="inline-flex items-center px-4 py-2 bg-green-500/20 border border-green-400/30 rounded-full text-green-50 text-sm font-medium mb-8 backdrop-blur-sm">
             <Leaf className="w-4 h-4 mr-2" />
             Authentic Products from Gilgit-Baltistan
           </div>
 
           {/* Main Heading */}
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight z-20">
             <span className="block">Nature from the</span>
             <span className="block bg-gradient-to-r from-green-300 to-green-100 bg-clip-text text-transparent">
               Peaks of Baltistan
@@ -55,7 +58,7 @@ const Hero = () => {
           </h1>
 
           {/* Subtitle */}
-          <p className="text-lg md:text-xl text-green-100 mb-8 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-lg md:text-xl text-green-100 mb-8 max-w-2xl z-20 mx-auto leading-relaxed">
             Discover authentic organic products and handcrafted treasures from the majestic valleys of Gilgit-Baltistan, where K2 touches the sky.
           </p>
 
@@ -113,6 +116,6 @@ const Hero = () => {
       </div>
     </section>
   );
-};
+});
 
 export default Hero;
