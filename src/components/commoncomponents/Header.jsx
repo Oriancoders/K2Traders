@@ -65,11 +65,11 @@ const Header = () => {
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8 py-3">
         {/* Logo */}
         <Link to="/" className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center shadow-lg transform-gpu transition-transform hover:scale-105">
-            <Mountain className="h-6 w-6 text-white" />
+          <div className="sm:w-10 w-8 sm:h-10 h-8 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center shadow-lg transform-gpu transition-transform hover:scale-105">
+            <Mountain className="sm:h-6 sm:w-6 w-4 h-4 text-white" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-green-800 leading-tight">K2 Traders</h1>
+            <h1 className="sm:text-xl font-bold text-green-800 leading-tight">K2 Traders</h1>
             <p className="text-xs text-green-600 -mt-1">Nature from Baltistan</p>
           </div>
         </Link>

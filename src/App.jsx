@@ -16,7 +16,7 @@ function App() {
   return (
     <CartProvider>
       <Router>
-        <div className="min-h-screen">
+        <div className="min-h-screen max-w-[100vw]">
           <Header />
           <main>
             <Routes>
