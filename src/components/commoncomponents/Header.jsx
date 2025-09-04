@@ -10,8 +10,8 @@ import {
   Heart,
   LogOut
 } from 'lucide-react';
-import { useCart } from '../context/CartContext.jsx';
-import CartDrawer from './CartDrawer.jsx';
+import { useCart } from '../../context/CartContext.jsx';
+import CartDrawer from '../CartDrawer.jsx';
 
 const Header = () => {
   const location = useLocation();
@@ -61,7 +61,7 @@ const Header = () => {
   }, []);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 bg-white/80 backdrop-blur border-b border-gray-100">
+    <header className="fixed inset-x-0 top-0 z-50 bg-white backdrop-blur border-b border-gray-100">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8 py-3">
         {/* Logo */}
         <Link to="/" className="flex items-center space-x-3">
@@ -118,13 +118,13 @@ const Header = () => {
             />
           </div>
 
-          <button
+          {/* <button
             className="p-2 text-gray-600 hover:text-green-600 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 rounded"
             title="Account"
             aria-label="Account"
           >
             <User className="h-5 w-5" />
-          </button>
+          </button> */}
 
           <button
             type="button"

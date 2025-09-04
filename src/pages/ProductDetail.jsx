@@ -108,7 +108,7 @@ const ProductDetail = () => {
   };
 
   return (
-    <div className="py-12 bg-gradient-to-b from-white via-green-50/40 to-white">
+    <div className="py-20 bg-gradient-to-b from-white via-green-50/40 to-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <Link
           to="/shop"

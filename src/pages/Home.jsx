@@ -33,7 +33,7 @@ const Home = React.memo(() => {
       <Suspense fallback={<Loader />}>
         <BrandStory />
       </Suspense>
-
+ 
       <Suspense fallback={<Loader />}>
         <Blog />
       </Suspense>

@@ -44,7 +44,7 @@ const Hero = React.memo(() => {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-20">
         <div className="max-w-4xl mx-auto">
           {/* Badge */}
-          <div className="inline-flex items-center px-4 py-2 bg-green-500/20 border border-green-400/30 rounded-full text-green-50 text-sm font-medium mb-8 backdrop-blur-sm">
+          <div className="inline-flex items-center px-4 py-2 bg-green-500/70 border border-green-400/70 rounded-full text-green-50 text-sm font-medium mb-8 backdrop-blur-sm">
             <Leaf className="w-4 h-4 mr-2" />
             Authentic Products from Gilgit-Baltistan
           </div>

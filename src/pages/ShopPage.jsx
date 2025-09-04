@@ -1,8 +1,19 @@
-import React, { useState } from 'react';
+import React, { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { Search, Filter, Grid, List } from 'lucide-react';
-import ProductCard from '../components/ProductCard.jsx';
-import CategoryFilter from '../components/CategoryFilter.jsx';
+
+// Lazy load components
+const ProductCard = lazy(() => import("../components/ProductCard.jsx"));
+const CategoryFilter = lazy(() => import("../components/CategoryFilter.jsx"));
 import { products } from '../data/products.js';
+
+
+const Loader = () => (
+  <div className="flex items-center justify-center h-screen">
+    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
+  </div>
+);
+
+
 
 const ShopPage = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -10,14 +21,40 @@ const ShopPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [viewMode, setViewMode] = useState('grid');
   const [priceRange, setPriceRange] = useState([0, 200]);
+    const [loading, setLoading] = useState(true);
 
-  const filteredProducts = products.filter(product => {
-    const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
-    const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         product.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesPrice = product.price >= priceRange[0] && product.price <= priceRange[1];
-    return matchesCategory && matchesSearch && matchesPrice;
-  });
+  // Scroll to top on mount & show loader until at top
+  useEffect(() => {
+    window.scrollTo(0, 0);
+
+    const handleScroll = () => {
+      if (window.scrollY === 0) {
+        setLoading(false);
+      } else {
+        setLoading(true);
+      }
+    };
+
+    handleScroll(); // run once
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  
+   // Filtered Products (memoized)
+  const filteredProducts = useMemo(() => {
+    return products.filter((product) => {
+      const matchesCategory =
+        selectedCategory === "all" || product.category === selectedCategory;
+      const matchesSearch =
+        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.description.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesPrice =
+        product.price >= priceRange[0] && product.price <= priceRange[1];
+      return matchesCategory && matchesSearch && matchesPrice;
+    });
+  }, [selectedCategory, searchTerm, priceRange]);
 
   const sortedProducts = [...filteredProducts].sort((a, b) => {
     switch (sortBy) {
@@ -37,7 +74,8 @@ const ShopPage = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-24">
+    <Suspense fallback={<Loader />}>
+<div className="min-h-screen bg-gray-50 pt-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Page Header */}
         <div className="text-center mb-12">
@@ -129,7 +167,7 @@ const ShopPage = () => {
         </div>
 
         {/* Products Grid/List */}
-        <div className={`${
+        {sortedProducts ? ( <div className={`${
           viewMode === 'grid' 
             ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8' 
             : 'space-y-6'
@@ -141,7 +179,9 @@ const ShopPage = () => {
               viewMode={viewMode}
             />
           ))}
-        </div>
+        </div>) : (
+          <div>Loading products...</div>
+         )}
 
         {sortedProducts.length === 0 && (
           <div className="text-center py-16">
@@ -154,6 +194,8 @@ const ShopPage = () => {
         )}
       </div>
     </div>
+    </Suspense>
+    
   );
 };
 

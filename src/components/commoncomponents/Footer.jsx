@@ -12,7 +12,7 @@ import {
   Twitter,
   ArrowRight
 } from 'lucide-react';
-import { companyInfo } from '../data/company.js';
+import { companyInfo } from '../../data/company.js';
 
 const Footer = () => {
   const [email, setEmail] = useState('');

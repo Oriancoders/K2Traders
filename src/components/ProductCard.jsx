@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ShoppingCart, Heart, Star } from 'lucide-react';
 import { useCart } from '../context/CartContext.jsx';
 
@@ -7,6 +7,7 @@ const formatPrice = (v) => `$${(Number(v) || 0).toFixed(2)}`;
 
 const ProductCard = ({ product }) => {
   const { addItem } = useCart();
+  const navigate = useNavigate();
 
   const to = `/shop/${product.id}`;
   const image = useMemo(
@@ -29,16 +30,22 @@ const ProductCard = ({ product }) => {
       aria-labelledby={`prod-${product.id}-title`}
       className="group relative rounded-2xl border border-gray-100 bg-white/80 backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:ring-1 hover:ring-green-200 overflow-hidden"
     >
+      {/* Wishlist Button */}
       <button
         type="button"
         title="Add to wishlist"
         className="absolute right-3 top-3 z-10 inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-gray-600 shadow-md ring-1 ring-gray-200 transition hover:scale-105 hover:text-rose-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-400"
-        onClick={(e) => { e.stopPropagation(); e.preventDefault(); /* wishlist logic */ }}
+        onClick={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          // wishlist logic
+        }}
         aria-label="Add to wishlist"
       >
         <Heart className="h-5 w-5" />
       </button>
 
+      {/* Whole card is a link */}
       <Link to={to} className="block" aria-label={`View details for ${product.name || product.title}`}>
         <div className="relative h-56 w-full overflow-hidden bg-gray-50">
           {image ? (
@@ -55,6 +62,7 @@ const ProductCard = ({ product }) => {
             </div>
           )}
 
+          {/* Badges */}
           <div className="absolute left-3 top-3 flex items-center gap-2">
             {hasDiscount && (
               <span className="rounded-full bg-rose-500 px-2.5 py-1 text-xs font-semibold text-white shadow">
@@ -68,31 +76,41 @@ const ProductCard = ({ product }) => {
             )}
           </div>
 
+          {/* Hover actions */}
           <div className="pointer-events-none absolute inset-x-3 bottom-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
             <div className="pointer-events-auto flex overflow-hidden rounded-xl shadow-lg">
               <button
                 type="button"
                 className="flex-1 bg-green-600 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-green-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500"
-                onClick={(e) => { e.preventDefault(); e.stopPropagation(); addItem(product, 1); }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  addItem(product, 1);
+                }}
                 title="Add to cart"
                 aria-label={`Add ${product.name || 'product'} to cart`}
               >
                 Add to cart
               </button>
-              <Link
-                to={to}
+              <button
+                type="button"
                 className="inline-flex items-center gap-2 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 ring-1 ring-inset ring-gray-200"
                 title="View details"
-                onClick={(e) => e.stopPropagation()}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  navigate(to);
+                }}
               >
                 <ShoppingCart className="h-4 w-4" />
                 Details
-              </Link>
+              </button>
             </div>
           </div>
         </div>
       </Link>
 
+      {/* Product Info */}
       <div className="p-4">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
@@ -116,7 +134,6 @@ const ProductCard = ({ product }) => {
                 <Star
                   key={i}
                   className={`h-4 w-4 ${i < Math.round(rating) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
-                  aria-hidden
                 />
               ))}
               <span className="ml-1 text-xs text-gray-500">{rating}</span>
