@@ -140,7 +140,7 @@ const Footer = () => {
             </p>
           </div>
 
-          <form onSubmit={handleSubscribe} className="flex gap-3 items-center">
+          <form onSubmit={handleSubscribe} className="flex sm:flex-row flex-col gap-3 items-center">
             <label htmlFor="footer-newsletter" className="sr-only">Email</label>
             <input
               id="footer-newsletter"
@@ -148,7 +148,7 @@ const Footer = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Your email address"
-              className="w-64 max-w-xs rounded-lg border border-green-700 bg-white/5 px-3 py-2 text-green-50 placeholder-green-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
+              className="sm:w-64 max-w-xs rounded-lg border border-green-700 bg-white/5 px-3 py-2 text-green-50 placeholder-green-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
               aria-label="Enter your email for newsletter"
             />
             <button

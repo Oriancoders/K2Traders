@@ -162,8 +162,8 @@ const Header = () => {
             aria-hidden="true"
           />
           <div className="fixed right-0 top-0 z-50 w-full max-w-xs bg-white/95 backdrop-blur-sm border-l border-gray-100 h-full shadow-2xl transform-gpu">
-            <div className="p-4">
-              <div className="flex items-center justify-between">
+            <div className="p-4 bg-white">
+              <div className="flex items-center justify-between bg-white">
                 <Link to="/" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-3">
                   <div className="w-9 h-9 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center shadow">
                     <Mountain className="h-5 w-5 text-white" />
@@ -175,7 +175,7 @@ const Header = () => {
                 </button>
               </div>
 
-              <nav className="mt-6 flex flex-col gap-3" aria-label="Mobile">
+              <nav className="mt-6 flex flex-col gap-3 bg-white" aria-label="Mobile">
                 {navigation.map((item) => (
                   <Link
                     key={item.name}
@@ -188,12 +188,10 @@ const Header = () => {
                 ))}
 
                 <div className="mt-4 pt-4 border-t border-gray-100">
-                  <Link to="/account" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-3 py-2 px-3 rounded-md text-gray-700 hover:bg-gray-50">
-                    <User className="h-5 w-5" /> Account
-                  </Link>
-                  <Link to="/wishlist" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-3 py-2 px-3 rounded-md text-gray-700 hover:bg-gray-50">
+
+                  {/* <Link to="/wishlist" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-3 py-2 px-3 rounded-md text-gray-700 hover:bg-gray-50">
                     <Heart className="h-5 w-5" /> Wishlist
-                  </Link>
+                  </Link> */}
                 </div>
               </nav>
             </div>
