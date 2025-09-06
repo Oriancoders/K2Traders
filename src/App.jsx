@@ -11,7 +11,7 @@ import BlogPage from './pages/BlogPage.jsx';
 import BlogDetailPage from './pages/BlogDetailPage.jsx';
 import ContactPage from './pages/ContactPage.jsx';
 import { CartProvider } from './context/CartContext.jsx';
-import { WishlistProvider } from './context/WishlistContext.jsx';
+import { WishlistProvider } from './context/WishContext.jsx';
 
 function App() {
   return (
