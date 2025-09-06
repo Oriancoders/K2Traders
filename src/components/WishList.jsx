@@ -1,5 +1,5 @@
 import React from "react";
-import { useWishlist } from "../context/WishlistContext.jsx";
+import { useWishlist } from "../context/WishContext.jsx";
 import ProductCard from "./ProductCard.jsx";
 
 const Wishlist = () => {

@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-const WishlistContext = createContext();
+const WishContext = createContext();
 
 export const WishlistProvider = ({ children }) => {
   const [wishlist, setWishlist] = useState(() => {
@@ -32,10 +32,10 @@ export const WishlistProvider = ({ children }) => {
   const clearWishlist = () => setWishlist([]);
 
   return (
-    <WishlistContext.Provider value={{ wishlist, addToWishlist, removeFromWishlist, clearWishlist , isInWishlist }}>
+    <WishContext.Provider value={{ wishlist, addToWishlist, removeFromWishlist, clearWishlist , isInWishlist }}>
       {children}
-    </WishlistContext.Provider>
+    </WishContext.Provider>
   );
 };
 
-export const useWishlist = () => useContext(WishlistContext);
+export const useWishlist = () => useContext(WishContext);

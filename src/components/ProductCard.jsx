@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ShoppingCart, Heart, Star } from 'lucide-react';
 import { useCart } from '../context/CartContext.jsx';
-import { useWishlist } from '../context/WishListContext.jsx';
+import { useWishlist } from '../context/WishContext.jsx';
 
 const formatPrice = (v) => `Rs ${(Number(v) || 0).toFixed(0)}`;
 
