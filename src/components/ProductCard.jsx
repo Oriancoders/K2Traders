@@ -31,7 +31,7 @@ const ProductCard = ({ product, onImageLoad }) => {
     <article
       role="article"
       aria-labelledby={`prod-${product.id}-title`}
-      className="group relative rounded-2xl border border-gray-100 bg-white/80 backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:shadow-xl shadow-lg hover:ring-1 hover:ring-green-200 overflow-hidden max-w-[300px]"
+      className="group relative rounded-2xl border border-gray-100 bg-white/80 backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:shadow-xl shadow-lg hover:ring-1 hover:ring-green-200 overflow-hidden "
     >
       {/* Wishlist Button */}
       <button

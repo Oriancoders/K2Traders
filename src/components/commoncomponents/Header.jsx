@@ -96,7 +96,7 @@ const Header = () => {
 
         {/* Right Actions */}
         <div className="flex items-center gap-3">
-          <button
+          {/* <button
             onClick={() => setShowSearch((s) => !s)}
             aria-expanded={showSearch}
             aria-label="Open search"
@@ -104,7 +104,7 @@ const Header = () => {
             title="Search"
           >
             <Search className="h-5 w-5" />
-          </button>
+          </button> */}
 
           {/* Search input (animated) */}
           <div className={`relative transition-all ${showSearch ? 'w-64' : 'w-0 overflow-hidden'}`}>

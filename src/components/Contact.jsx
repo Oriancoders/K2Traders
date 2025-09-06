@@ -1,11 +1,75 @@
-import React from 'react';
-import { Phone, Mail, MapPin, Clock, Globe } from 'lucide-react';
-import ContactForm from './ContactForm.jsx';
-import { companyInfo } from '../data/company.js';
+import React, { useState, useEffect } from "react";
+import { Phone, Mail, MapPin, Clock, Globe } from "lucide-react";
+import ContactForm from "./ContactForm.jsx";
+import { companyInfo } from "../data/company.js";
 
 const Contact = () => {
+  const [loading, setLoading] = useState(true);
+
+  // scroll to top on mount
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    const timer = setTimeout(() => setLoading(false), 1000); // simulate loading
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    // 🔹 Skeleton Loader
+    return (
+      <section className="py-20 bg-gradient-to-b from-white via-green-50 to-white animate-pulse">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Header Skeleton */}
+          <div className="text-center mb-16">
+            <div className="h-10 w-64 bg-gray-200 mx-auto rounded-lg mb-4"></div>
+            <div className="h-5 w-96 bg-gray-200 mx-auto rounded-lg"></div>
+          </div>
+
+          {/* Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+            {/* Left side */}
+            <div className="space-y-6">
+              {Array(4)
+                .fill("")
+                .map((_, idx) => (
+                  <div key={idx} className="flex items-start gap-4">
+                    <div className="w-14 h-14 bg-gray-200 rounded-xl"></div>
+                    <div className="flex-1 space-y-2">
+                      <div className="h-4 w-32 bg-gray-200 rounded"></div>
+                      <div className="h-3 w-48 bg-gray-200 rounded"></div>
+                    </div>
+                  </div>
+                ))}
+              <div className="p-6 bg-gray-100 rounded-2xl space-y-3">
+                <div className="h-4 w-48 bg-gray-200 rounded"></div>
+                <div className="h-3 w-full bg-gray-200 rounded"></div>
+                <div className="h-3 w-2/3 bg-gray-200 rounded"></div>
+              </div>
+            </div>
+
+            {/* Right side (form skeleton) */}
+            <div className="bg-white rounded-2xl shadow-2xl p-8 border border-green-100">
+              <div className="space-y-4">
+                {Array(3)
+                  .fill("")
+                  .map((_, idx) => (
+                    <div key={idx} className="h-10 bg-gray-200 rounded"></div>
+                  ))}
+                <div className="h-24 bg-gray-200 rounded"></div>
+                <div className="h-10 w-32 bg-gray-300 rounded"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // 🔹 Real Content
   return (
-    <section id="contact" className="py-20 bg-gradient-to-b from-white via-green-50 to-white">
+    <section
+      id="contact"
+      className="py-20 bg-gradient-to-b from-white via-green-50 to-white"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
@@ -20,8 +84,10 @@ const Contact = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
           {/* Contact Information */}
           <div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-8">Contact Information</h3>
-            
+            <h3 className="text-2xl font-bold text-gray-900 mb-8">
+              Contact Information
+            </h3>
+
             <div className="space-y-6 mb-8">
               <div className="flex items-start gap-4">
                 <div className="w-14 h-14 bg-gradient-to-br from-green-100 to-emerald-100 rounded-xl flex items-center justify-center shadow">

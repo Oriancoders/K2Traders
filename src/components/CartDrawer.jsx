@@ -43,7 +43,7 @@ const CartDrawer = ({ open, onClose }) => {
       {/* Panel */}
       <aside
         className={`
-          fixed right-0 top-0 h-screen w-full sm:w-[420px] max-w-full bg-white/80 backdrop-blur-2xl shadow-2xl rounded-l-3xl
+          fixed right-0 top-0 h-[100dvh] w-full sm:w-[420px] max-w-full bg-white/80 backdrop-blur-2xl shadow-2xl rounded-l-3xl
           transition-transform duration-500
           ${open ? 'translate-x-0' : 'translate-x-full'}
           flex flex-col

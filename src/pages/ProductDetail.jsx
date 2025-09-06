@@ -12,6 +12,7 @@ const formatPrice = (v) => {
 
 const Rating = ({ value = 0 }) => {
   const full = Math.round(Number(value) || 0);
+  
   return (
     <div className="flex items-center gap-1" aria-hidden>
       {Array.from({ length: 5 }).map((_, i) => (
@@ -26,6 +27,11 @@ const Rating = ({ value = 0 }) => {
 };
 
 const ProductDetail = () => {
+  // 👇 Scroll to top
+    useEffect(() => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }, []);
+  
   const { id } = useParams();
   const product = useMemo(() => products.find((p) => String(p.id) === String(id)), [id]);
 

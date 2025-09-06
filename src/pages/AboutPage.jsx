@@ -3,7 +3,7 @@ import About from '../components/About.jsx';
 
 const AboutPage = () => {
   return (
-    <div className="pt-20">
+    <div className="pt-10">
       <About />
     </div>
   );

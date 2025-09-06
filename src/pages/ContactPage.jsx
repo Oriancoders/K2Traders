@@ -3,7 +3,7 @@ import Contact from '../components/Contact.jsx';
 
 const ContactPage = () => {
   return (
-    <div className="pt-20">
+    <div className="pt-10">
       <Contact />
     </div>
   );
