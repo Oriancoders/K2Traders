@@ -499,41 +499,17 @@ export const categories = [
     image: "https://images.pexels.com/photos/1295572/pexels-photo-1295572.jpeg",
     icon: "🍇"
   },
+
+
   {
-    id: "oils-extracts",
-    name: "Oils & Extracts", 
-    description: "Cold-pressed oils and natural extracts",
-    image: "https://images.pexels.com/photos/4198935/pexels-photo-4198935.jpeg",
-    icon: "🫒"
-  },
-  {
-    id: "grains-foods",
-    name: "Grains & Traditional Foods",
-    description: "Ancient Himalayan staples and traditional foods",
-    image: "https://images.pexels.com/photos/1537086/pexels-photo-1537086.jpeg",
-    icon: "🌾"
-  },
-  {
-    id: "honey-teas",
-    name: "Honey & Herbal Teas",
+    id: "natural-oils-honey",
+    name: "Natural Oils & Honey",
     description: "Wild honey and mountain herb teas",
     image: "https://images.pexels.com/photos/1638240/pexels-photo-1638240.jpeg",
     icon: "🍯"
   },
-  {
-    id: "herbs-medicinal",
-    name: "Medicinal Herbs",
-    description: "Traditional healing plants and herbs",
-    image: "https://images.pexels.com/photos/3682293/pexels-photo-3682293.jpeg",
-    icon: "🌿"
-  },
-  {
-    id: "handicrafts",
-    name: "Handicrafts",
-    description: "Handmade crafts by local artisans",
-    image: "https://images.pexels.com/photos/7889685/pexels-photo-7889685.jpeg",
-    icon: "🎨"
-  },
+
+
 
   // Additional categories aligned with your products
   {

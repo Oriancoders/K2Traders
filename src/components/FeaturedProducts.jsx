@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ProductCard from './ProductCard.jsx';
 import { products } from '../data/products.js';
 import { ArrowRight } from 'lucide-react';
@@ -6,9 +6,16 @@ import { Link } from 'react-router-dom';
 
 const FeaturedProducts = () => {
   const featuredProducts = products.filter((p) => p?.featured);
+  const [loadedCount, setLoadedCount] = useState(0);
 
   if (!featuredProducts.length) return null;
 
+  const handleImageLoad = () => {
+    setLoadedCount((prev) => prev + 1);
+  };
+
+  const allLoaded = loadedCount >= featuredProducts.length;
+  
   return (
     <section
       aria-labelledby="featured-heading"
@@ -21,7 +28,10 @@ const FeaturedProducts = () => {
             <span className="inline-block rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700">
               Handpicked
             </span>
-            <h2 id="featured-heading" className="mt-3 text-3xl md:text-4xl font-extrabold tracking-tight text-gray-900">
+            <h2
+              id="featured-heading"
+              className="mt-3 text-3xl md:text-4xl font-extrabold tracking-tight text-gray-900"
+            >
               Featured Products
             </h2>
             <p className="mt-3 text-gray-600 max-w-2xl">
@@ -42,10 +52,30 @@ const FeaturedProducts = () => {
         </div>
 
         {/* Products Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8">
-          {featuredProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
+        <div className="relative">
+          {/* Loader Overlay */}
+          {!allLoaded && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8 transition-opacity duration-500">
+              {[4,4,4,4,4,4,4.].map((index) => (
+                <div className='bg-gray-200 animate-pulse h-[300px] w-full'></div>
+              ))}
+            </div>
+          )}
+
+          {/* Always render products (so onLoad fires) */}
+          <div
+            className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8 transition-opacity duration-500 ${
+              allLoaded ? 'opacity-100' : 'opacity-0'
+            }`}
+          >
+            {featuredProducts.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                onImageLoad={handleImageLoad} // ✅ callback
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>

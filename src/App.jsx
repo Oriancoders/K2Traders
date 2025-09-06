@@ -11,11 +11,13 @@ import BlogPage from './pages/BlogPage.jsx';
 import BlogDetailPage from './pages/BlogDetailPage.jsx';
 import ContactPage from './pages/ContactPage.jsx';
 import { CartProvider } from './context/CartContext.jsx';
+import { WishlistProvider } from './context/WishListContext.jsx';
 
 function App() {
   return (
     <CartProvider>
-      <Router>
+      <WishlistProvider>
+        <Router>
         <div className="min-h-screen max-w-[100vw]">
           <Header />
           <main>
@@ -33,6 +35,7 @@ function App() {
           <Footer />
         </div>
       </Router>
+      </WishlistProvider>
     </CartProvider>
   );
 }

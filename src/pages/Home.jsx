@@ -7,6 +7,8 @@ const About = lazy(() => import("../components/About.jsx"));
 const BrandStory = lazy(() => import("../components/BrandStory.jsx"));
 const Blog = lazy(() => import("../components/Blog.jsx"));
 const CheckIn = lazy(() => import("../components/CheckIn.jsx"));
+const Wishlist = lazy(() => import("../components/WishList.jsx"));
+
 
 // Loader Component
 const Loader = () => (
@@ -20,26 +22,18 @@ const Home = React.memo(() => {
     <div>
       <Suspense fallback={<Loader />}>
         <Hero />
-      </Suspense>
 
-      <Suspense fallback={<Loader />}>
-        <FeaturedProducts />
-      </Suspense>
+      <FeaturedProducts />
 
-      <Suspense fallback={<Loader />}>
-        <About />
-      </Suspense>
+      <Wishlist />
 
-      <Suspense fallback={<Loader />}>
-        <BrandStory />
-      </Suspense>
- 
-      <Suspense fallback={<Loader />}>
-        <Blog />
-      </Suspense>
+      <About />
 
-      <Suspense fallback={<Loader />}>
-        <CheckIn />
+      <BrandStory />
+
+      <Blog />
+
+      <CheckIn />
       </Suspense>
     </div>
   );

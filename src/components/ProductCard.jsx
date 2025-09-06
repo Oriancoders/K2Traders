@@ -2,10 +2,13 @@ import React, { useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ShoppingCart, Heart, Star } from 'lucide-react';
 import { useCart } from '../context/CartContext.jsx';
+import { useWishlist } from '../context/WishListContext.jsx';
 
 const formatPrice = (v) => `Rs ${(Number(v) || 0).toFixed(0)}`;
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, onImageLoad }) => {
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+  const inWishlist = isInWishlist(product.id);
   const { addItem } = useCart();
   const navigate = useNavigate();
 
@@ -28,21 +31,25 @@ const ProductCard = ({ product }) => {
     <article
       role="article"
       aria-labelledby={`prod-${product.id}-title`}
-      className="group relative rounded-2xl border border-gray-100 bg-white/80 backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:ring-1 hover:ring-green-200 overflow-hidden"
+      className="group relative rounded-2xl border border-gray-100 bg-white/80 backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:shadow-xl shadow-lg hover:ring-1 hover:ring-green-200 overflow-hidden max-w-[300px]"
     >
       {/* Wishlist Button */}
       <button
         type="button"
-        title="Add to wishlist"
-        className="absolute right-3 top-3 z-10 inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-gray-600 shadow-md ring-1 ring-gray-200 transition hover:scale-105 hover:text-rose-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-400"
+        title={inWishlist ? "Remove from wishlist" : "Add to wishlist"}
+        className={`absolute right-3 top-3 z-10 inline-flex h-9 w-9 items-center justify-center rounded-full shadow-md ring-1 transition 
+    ${inWishlist
+            ? "bg-white text-rose-400 ring-white hover:scale-105"
+            : "bg-white/90 text-gray-600 ring-gray-200 hover:text-rose-500 hover:scale-105"
+          }`}
         onClick={(e) => {
           e.stopPropagation();
           e.preventDefault();
-          // wishlist logic
+          inWishlist ? removeFromWishlist(product.id) : addToWishlist(product);
         }}
-        aria-label="Add to wishlist"
+        aria-label={inWishlist ? "Remove from wishlist" : "Add to wishlist"}
       >
-        <Heart className="h-5 w-5" />
+        <Heart className={`h-5 w-5 ${inWishlist ? "fill-current" : ""}`} />
       </button>
 
       {/* Whole card is a link */}
@@ -55,6 +62,7 @@ const ProductCard = ({ product }) => {
               className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105"
               loading="lazy"
               decoding="async"
+              onLoad={onImageLoad}   // ✅ NEW
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-green-100 to-green-200 text-green-700">
