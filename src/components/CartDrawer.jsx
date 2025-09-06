@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { X, Trash2, CheckCircle, ShoppingCart, ArrowLeft } from 'lucide-react';
 import { useCart } from '../context/CartContext.jsx';
 
-const formatPrice = (v) => `$${(Number(v) || 0).toFixed(2)}`;
+const formatPrice = (v) => `Rs ${(Number(v) || 0).toFixed(2)}`;
 
 const CartDrawer = ({ open, onClose }) => {
   const { items, removeItem, updateItem, subtotal, clearCart } = useCart();
@@ -19,11 +19,18 @@ const CartDrawer = ({ open, onClose }) => {
   const handleCheckout = async (e) => {
     e.preventDefault();
     setSubmitting(true);
+
     await new Promise((r) => setTimeout(r, 900));
+
+    console.log("🚀 Shipping Details:", form);
+    console.log("🛒 Cart Items:", items);
+    console.log("💰 Subtotal:", subtotal);
+
     setSubmitting(false);
     setSubmitted(true);
     clearCart();
   };
+
 
   return (
     <div className={`fixed inset-0 z-[100] ${open ? '' : 'pointer-events-none'}`}>
@@ -46,7 +53,7 @@ const CartDrawer = ({ open, onClose }) => {
         role="dialog"
         tabIndex={-1}
       >
-        <div className="flex items-center justify-between border-b border-gray-100 px-6 py-5 bg-white/70 rounded-tl-3xl">
+        <div className="flex items-center justify-between border-b border-gray-100 px-6 py-5 bg-white rounded-tl-3xl">
           <div className="flex items-center gap-2">
             {showCheckout ? (
               <button
@@ -75,7 +82,7 @@ const CartDrawer = ({ open, onClose }) => {
           </button>
         </div>
 
-        <div className="flex-1 min-h-0 overflow-y-auto px-6 py-5">
+        <div className="flex-1 min-h-0 overflow-y-auto px-6 py-5 bg-white">
           {!showCheckout ? (
             items.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full text-gray-400">
@@ -141,8 +148,9 @@ const CartDrawer = ({ open, onClose }) => {
               <div className="w-full max-w-md mx-auto">
                 {!submitted ? (
                   <form
-                    className="space-y-5 bg-white/95 rounded-2xl shadow-2xl p-6 border border-gray-100 animate-fade-in"
+                    className="space-y-5 bg-white/95 rounded-2xl shadow-lg p-6 border border-gray-100 animate-fade-in"
                     onSubmit={handleCheckout}
+
                   >
                     <h4 className="text-2xl font-extrabold text-gray-900 mb-2 text-center tracking-tight">
                       Shipping Details
@@ -166,7 +174,7 @@ const CartDrawer = ({ open, onClose }) => {
                       className="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-green-500 focus:ring-2 focus:ring-green-500 transition"
                     />
                     <input
-                      type="tel"
+                      type="number"
                       name="phone"
                       required
                       placeholder="Phone"

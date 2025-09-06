@@ -7,7 +7,7 @@ import { Star, CheckCircle, ArrowLeft, Shield, Truck, Phone } from 'lucide-react
 const formatPrice = (v) => {
   if (v == null) return '';
   const n = Number(v);
-  return isNaN(n) ? v : `$${n.toFixed(2)}`;
+  return isNaN(n) ? v : `Rs ${n.toFixed(0)}`;
 };
 
 const Rating = ({ value = 0 }) => {
@@ -120,13 +120,12 @@ const ProductDetail = () => {
 
         <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-10">
           {/* Image + info */}
-          <div className="rounded-2xl overflow-hidden border border-gray-100 bg-white shadow-sm">
-            <div className="relative h-80 sm:h-[28rem] w-full overflow-hidden">
+           <div className="relative h-80 sm:h-[28rem] w-full overflow-hidden">
               {image ? (
                 <img
                   src={image}
                   alt={product.name || product.title || 'Product'}
-                  className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+                  className="h-full w-full object-contain transition-transform duration-700 hover:scale-105"
                   loading="lazy"
                   decoding="async"
                 />
@@ -141,6 +140,8 @@ const ProductDetail = () => {
                 </span>
               )}
             </div>
+          <div className="rounded-2xl overflow-hidden border border-gray-100 bg-white shadow-sm">
+           
 
             <div className="p-6 border-t border-gray-100">
               <h1 className="text-2xl font-bold text-gray-900">
@@ -192,116 +193,7 @@ const ProductDetail = () => {
           </div>
 
           {/* Order form */}
-          <div className="lg:pl-4">
-            <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
-              <h2 className="text-xl font-bold text-gray-900">Order this product</h2>
-              <p className="mt-1 text-sm text-gray-600">
-                Fill the form and we will confirm your order shortly.
-              </p>
-
-              <form onSubmit={handleSubmit} className="mt-6 space-y-4" aria-label="Order form">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Full name</label>
-                    <input
-                      type="text"
-                      name="name"
-                      value={form.name}
-                      onChange={handleChange}
-                      required
-                      className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-green-500 focus:ring-2 focus:ring-green-500"
-                      placeholder="John Doe"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Email</label>
-                    <input
-                      type="email"
-                      name="email"
-                      value={form.email}
-                      onChange={handleChange}
-                      required
-                      className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-green-500 focus:ring-2 focus:ring-green-500"
-                      placeholder="you@example.com"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Phone</label>
-                    <input
-                      type="tel"
-                      name="phone"
-                      value={form.phone}
-                      onChange={handleChange}
-                      required
-                      className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-green-500 focus:ring-2 focus:ring-green-500"
-                      placeholder="+1 555 000 1234"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Quantity</label>
-                    <input
-                      type="number"
-                      name="quantity"
-                      min={1}
-                      value={form.quantity}
-                      onChange={handleChange}
-                      className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-green-500 focus:ring-2 focus:ring-green-500"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Address</label>
-                  <textarea
-                    name="address"
-                    value={form.address}
-                    onChange={handleChange}
-                    required
-                    rows={3}
-                    className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-green-500 focus:ring-2 focus:ring-green-500"
-                    placeholder="Street, City, Country"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Notes (optional)</label>
-                  <textarea
-                    name="notes"
-                    value={form.notes}
-                    onChange={handleChange}
-                    rows={3}
-                    className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-green-500 focus:ring-2 focus:ring-green-500"
-                    placeholder="Any extra info or request"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="inline-flex w-full items-center justify-center rounded-xl bg-green-600 px-5 py-3 font-semibold text-white shadow-lg shadow-green-600/20 transition hover:bg-green-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 disabled:opacity-60"
-                >
-                  {submitting ? 'Placing order...' : `Place order - ${formatPrice(product.price)}`}
-                </button>
-
-                <div aria-live="polite" className="min-h-[1.25rem]">
-                  {submitted && (
-                    <div className="mt-4 inline-flex items-center gap-2 text-sm text-green-700 bg-green-50 border border-green-200 rounded-lg px-3 py-2">
-                      <CheckCircle className="h-4 w-4" />
-                      Your order request has been submitted. We’ll contact you soon!
-                    </div>
-                  )}
-                </div>
-              </form>
-            </div>
-
-            {/* Contact hint */}
-            <div className="mt-4 text-sm text-gray-600">
-              Prefer talking? Reach us via the contact page for urgent orders.
-            </div>
-          </div>
+          
         </div>
       </div>
     </div>

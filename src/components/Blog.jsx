@@ -1,6 +1,7 @@
 import React from 'react';
 import { Calendar, User, ArrowRight } from 'lucide-react';
 import { blogPosts } from '../data/company.js';
+import { Link } from 'react-router-dom';
 
 const Blog = () => {
   return (
@@ -89,10 +90,10 @@ const Blog = () => {
 
         {/* View All Button */}
         <div className="text-center mt-14">
-          <button className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-green-500 via-emerald-500 to-green-600 px-8 py-4 font-bold text-white shadow-lg hover:from-green-600 hover:to-emerald-600 transition active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 text-lg">
+          <Link to="/blog" className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-green-500 via-emerald-500 to-green-600 px-8 py-4 font-bold text-white shadow-lg hover:from-green-600 hover:to-emerald-600 transition active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 text-lg">
             View All Posts
             <ArrowRight className="h-5 w-5" />
-          </button>
+          </Link>
         </div>
       </div>
     </section>

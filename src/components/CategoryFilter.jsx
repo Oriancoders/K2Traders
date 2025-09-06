@@ -3,7 +3,7 @@ import { categories } from '../data/products.js';
 
 const CategoryFilter = ({ selectedCategory, onCategoryChange }) => {
   return (
-    <div className="flex flex-wrap gap-4 justify-center mb-10">
+    <div className="sm:flex sm:flex-wrap grid grid-cols-2 gap-4 justify-center mb-10">
       <button
         onClick={() => onCategoryChange('all')}
         className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500
@@ -27,9 +27,9 @@ const CategoryFilter = ({ selectedCategory, onCategoryChange }) => {
           aria-pressed={selectedCategory === category.id}
         >
           {category.icon && (
-            <span className="text-xl">{category.icon}</span>
+            <span className="sm:text-xl text-sm">{category.icon}</span>
           )}
-          {category.name}
+          <span className='sm:text-sm text-xs'>{category.name}</span>
         </button>
       ))}
     </div>

@@ -1,5 +1,5 @@
 import React, { lazy, Suspense, useEffect, useMemo, useState } from 'react';
-import { Search, Filter, Grid, List } from 'lucide-react';
+import { Search,  Grid, List } from 'lucide-react';
 
 // Lazy load components
 const ProductCard = lazy(() => import("../components/ProductCard.jsx"));
@@ -20,7 +20,7 @@ const ShopPage = () => {
   const [sortBy, setSortBy] = useState('featured');
   const [searchTerm, setSearchTerm] = useState('');
   const [viewMode, setViewMode] = useState('grid');
-  const [priceRange, setPriceRange] = useState([0, 200]);
+  const [priceRange, setPriceRange] = useState([0, 5000]);
     const [loading, setLoading] = useState(true);
 
   // Scroll to top on mount & show loader until at top
@@ -145,7 +145,7 @@ const ShopPage = () => {
             <input
               type="range"
               min="0"
-              max="200"
+              max="5000"
               value={priceRange[1]}
               onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
               className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"

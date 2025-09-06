@@ -493,7 +493,7 @@ export const products = [
 
 export const categories = [
   {
-    id: "dried-fruits",
+    id: "dry-fruits",
     name: "Dried Fruits & Nuts",
     description: "Sun-dried fruits and wild mountain nuts",
     image: "https://images.pexels.com/photos/1295572/pexels-photo-1295572.jpeg",

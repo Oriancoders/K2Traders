@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ShoppingCart, Heart, Star } from 'lucide-react';
 import { useCart } from '../context/CartContext.jsx';
 
-const formatPrice = (v) => `$${(Number(v) || 0).toFixed(2)}`;
+const formatPrice = (v) => `Rs ${(Number(v) || 0).toFixed(0)}`;
 
 const ProductCard = ({ product }) => {
   const { addItem } = useCart();
@@ -52,7 +52,7 @@ const ProductCard = ({ product }) => {
             <img
               src={image}
               alt={product.name || product.title || 'Product image'}
-              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105"
               loading="lazy"
               decoding="async"
             />
