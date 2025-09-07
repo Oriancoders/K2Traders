@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { X, Trash2, CheckCircle, ShoppingCart, ArrowLeft } from 'lucide-react';
 import { useCart } from '../context/CartContext.jsx';
+import toast from 'react-hot-toast';
+import html2canvas from 'html2canvas';
+import { submitToGoogleSheets } from '../utils/submitToGoogleSheets.js';
 
 const formatPrice = (v) => `Rs ${(Number(v) || 0).toFixed(2)}`;
 
@@ -10,6 +13,7 @@ const CartDrawer = ({ open, onClose }) => {
   const [form, setForm] = useState({ name: '', email: '', phone: '', address: '' });
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [billId, setBillId] = useState('');
 
   const handleFormChange = (e) => {
     const { name, value } = e.target;
@@ -22,15 +26,58 @@ const CartDrawer = ({ open, onClose }) => {
 
     await new Promise((r) => setTimeout(r, 900));
 
-    console.log("🚀 Shipping Details:", form);
-    console.log("🛒 Cart Items:", items);
-    console.log("💰 Subtotal:", subtotal);
-
     setSubmitting(false);
     setSubmitted(true);
-    clearCart();
+
+    // Generate unique bill ID using timestamp
+    const newBillId = `K2T-${Date.now()}`;
+    setBillId(newBillId);
+
+    // Prepare bill data
+    const billData = {
+      billId: newBillId,
+      timestamp: new Date().toISOString(),
+      shipping: { ...form },
+      items: items.map(item => ({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity,
+        total: item.price * item.quantity
+      })),
+      subtotal
+    };
+
+    // Send bill data to Google Sheets via NoCodeAPI (replace YOUR_ENDPOINT)
+    try {
+      await submitToGoogleSheets(billData);
+    } catch (err) {
+      toast.error('Failed to send bill to Google Sheets');
+    }
+
+    
+
+    // Show amazing toast
+    toast(
+      <div className="flex flex-col items-start gap-2 z-50">
+        <span className="text-green-600 font-bold text-lg flex items-center gap-2">
+          <CheckCircle className="h-6 w-6" /> Order Placed!
+        </span>
+        <span className="text-gray-700">Thank you for your order.<br />Check your bill below.</span>
+      </div>,
+      { duration: 4000 }
+    );
   };
 
+  const handleDownloadBill = async () => {
+    const bill = document.getElementById('order-bill');
+    if (!bill) return;
+    const canvas = await html2canvas(bill);
+    const link = document.createElement('a');
+    link.download = 'order-bill.png';
+    link.href = canvas.toDataURL();
+    link.click();
+  };
 
   return (
     <div className={`fixed inset-0 z-[100] ${open ? '' : 'pointer-events-none'}`}>
@@ -57,17 +104,29 @@ const CartDrawer = ({ open, onClose }) => {
           <div className="flex items-center gap-2">
             {showCheckout ? (
               <button
-                onClick={() => {
-                  setShowCheckout(false);
-                  setSubmitted(false);
-                }}
+                
                 className="rounded-full p-2 hover:bg-green-100 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500"
                 aria-label="Back to cart"
               >
-                <ArrowLeft className="h-5 w-5 text-green-600" />
+                <div onClick={() => {
+                  setShowCheckout(false);
+                  setSubmitted(false);
+                  clearCart();
+                }}>
+                  <ArrowLeft className="h-5 w-5 text-green-600" />
+                </div>
+                
               </button>
             ) : (
-              <ShoppingCart className="h-6 w-6 text-green-600" />
+              <div
+                onClick={() => {
+                  setShowCheckout(false);
+                  setSubmitted(false);
+                  
+                }}
+              >
+                <ShoppingCart className="h-6 w-6 text-green-600" />
+              </div>
             )}
             <h3 className="text-lg font-extrabold text-gray-900 tracking-tight drop-shadow-sm">
               {showCheckout ? 'Checkout' : 'Your Cart'}
@@ -228,6 +287,77 @@ const CartDrawer = ({ open, onClose }) => {
                   </form>
                 ) : (
                   <div className="flex flex-col items-center justify-center h-full py-12 animate-fade-in" aria-live="polite">
+                    {/* Bill UI */}
+                    <div
+                      id="order-bill"
+                      className="relative w-full max-w-md mx-auto mb-6 rounded-2xl shadow-lg border border-green-200 bg-white/95 p-6 overflow-hidden"
+                      style={{ fontFamily: 'monospace' }}
+                    >
+                      {/* Watermark */}
+                      <div
+                        style={{
+                          position: 'absolute',
+                          top: '50%',
+                          left: '50%',
+                          transform: 'translate(-50%, -50%)',
+                          fontSize: '3rem',
+                          color: '#22c55e22',
+                          fontWeight: 'bold',
+                          pointerEvents: 'none',
+                          userSelect: 'none',
+                          zIndex: 0,
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        K2Trader
+                      </div>
+                      <div className="relative z-10">
+                        <h4 className="text-2xl font-extrabold text-green-700 mb-4 text-center tracking-wide border-b pb-2">Order Bill</h4>
+                        <div className="mb-2 text-center text-xs text-gray-500">Bill ID: <span className="font-bold">{billId}</span></div>
+                        <div className="mb-4">
+                          <div className="font-bold text-gray-800 mb-1">Shipping Details:</div>
+                          <div className="pl-2 text-gray-700 text-sm">
+                            <div><span className="font-semibold">Name:</span> {form.name}</div>
+                            <div><span className="font-semibold">Email:</span> {form.email}</div>
+                            <div><span className="font-semibold">Phone:</span> {form.phone}</div>
+                            <div><span className="font-semibold">Address:</span> {form.address}</div>
+                          </div>
+                        </div>
+                        <div className="mb-4">
+                          <div className="font-bold text-gray-800 mb-1">Cart Items:</div>
+                          <table className="w-full text-sm border-collapse">
+                            <thead>
+                              <tr className="bg-green-50">
+                                <th className="text-left py-1 px-2 font-semibold">Item</th>
+                                <th className="text-center py-1 px-2 font-semibold">Qty</th>
+                                <th className="text-right py-1 px-2 font-semibold">Price</th>
+                                <th className="text-right py-1 px-2 font-semibold">Total</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {items.map((item) => (
+                                <tr key={item.id} className="border-b last:border-none">
+                                  <td className="py-1 px-2">{item.name}</td>
+                                  <td className="py-1 px-2 text-center">{item.quantity}</td>
+                                  <td className="py-1 px-2 text-right">{formatPrice(item.price)}</td>
+                                  <td className="py-1 px-2 text-right font-semibold">{formatPrice(item.price * item.quantity)}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                        <div className="mt-2 flex justify-between font-bold text-lg border-t pt-2">
+                          <span>Subtotal</span>
+                          <span>{formatPrice(subtotal)}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <button
+                      onClick={handleDownloadBill}
+                      className="mb-4 rounded-xl bg-green-600 px-4 py-2 font-bold text-white shadow hover:bg-green-700 transition active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500"
+                    >
+                      Download Bill
+                    </button>
                     <CheckCircle className="h-16 w-16 text-green-600 mb-4 animate-bounce" />
                     <div className="text-3xl font-extrabold text-green-700 mb-2">Order Placed!</div>
                     <div className="text-gray-600 text-center mb-4 text-lg">
@@ -237,6 +367,7 @@ const CartDrawer = ({ open, onClose }) => {
                       onClick={() => {
                         setShowCheckout(false);
                         setSubmitted(false);
+                        clearCart();
                       }}
                       className="rounded-xl bg-gradient-to-r from-green-500 via-emerald-500 to-green-600 px-6 py-3 font-bold text-white shadow hover:from-green-600 hover:to-emerald-600 transition active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500"
                     >

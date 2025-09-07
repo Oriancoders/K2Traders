@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
 import Header from './components/commoncomponents/Header.jsx';
 import Footer from './components/commoncomponents/Footer.jsx';
 import Home from './pages/Home.jsx';
@@ -36,6 +37,7 @@ function App() {
         </div>
       </Router>
       </WishlistProvider>
+      <Toaster position="top-right" />
     </CartProvider>
   );
 }

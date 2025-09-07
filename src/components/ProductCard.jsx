@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ShoppingCart, Heart, Star } from 'lucide-react';
 import { useCart } from '../context/CartContext.jsx';
 import { useWishlist } from '../context/WishContext.jsx';
+import toast from 'react-hot-toast'; // ✅ NEW
 
 const formatPrice = (v) => `Rs ${(Number(v) || 0).toFixed(0)}`;
 
@@ -45,7 +46,23 @@ const ProductCard = ({ product, onImageLoad }) => {
         onClick={(e) => {
           e.stopPropagation();
           e.preventDefault();
-          inWishlist ? removeFromWishlist(product.id) : addToWishlist(product);
+          if (inWishlist) {
+            removeFromWishlist(product.id);
+            toast(
+              <span className="flex items-center gap-2 text-rose-500">
+                <Heart className="h-5 w-5 fill-current" />
+                Removed from wishlist
+              </span>
+            );
+          } else {
+            addToWishlist(product);
+            toast(
+              <span className="flex items-center gap-2 text-green-500">
+                <Heart className="h-5 w-5 fill-current" />
+                Added to wishlist
+              </span>
+            );
+          }
         }}
         aria-label={inWishlist ? "Remove from wishlist" : "Add to wishlist"}
       >
@@ -94,6 +111,12 @@ const ProductCard = ({ product, onImageLoad }) => {
                   e.preventDefault();
                   e.stopPropagation();
                   addItem(product, 1);
+                  toast(
+                    <span className="flex items-center gap-2 text-green-600">
+                      <ShoppingCart className="h-5 w-5" />
+                      Added to cart
+                    </span>
+                  );
                 }}
                 title="Add to cart"
                 aria-label={`Add ${product.name || 'product'} to cart`}
