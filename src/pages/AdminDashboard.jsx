@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
-import { LogOut, Plus, Edit2, Trash2, Package } from 'lucide-react';
+import { LogOut, Plus, CreditCard as Edit2, Trash2, Package } from 'lucide-react';
 import toast from 'react-hot-toast';
 import ProductForm from '../components/admin/ProductForm';
 
