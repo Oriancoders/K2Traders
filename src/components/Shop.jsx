@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowUpDown, Search } from 'lucide-react';
 import CategoryFilter from './CategoryFilter.jsx';
 import ProductCard from './ProductCard.jsx';
-import { products } from '../data/products.js';
+import { useProducts } from '../hooks/useProducts.js';
 
 const formatPrice = (v) => {
   if (v == null) return '';
@@ -12,6 +12,7 @@ const formatPrice = (v) => {
 };
 
 const Shop = () => {
+  const { products, loading } = useProducts();
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortBy, setSortBy] = useState('featured');
   const [searchTerm, setSearchTerm] = useState('');
@@ -49,6 +50,19 @@ const Shop = () => {
     }
     return arr;
   }, [filtered, sortBy]);
+
+  if (loading) {
+    return (
+      <section className="relative py-24 bg-gradient-to-b from-white via-green-50 to-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto"></div>
+            <p className="mt-4 text-gray-600">Loading products...</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="shop" className="relative py-24 bg-gradient-to-b from-white via-green-50 to-white">

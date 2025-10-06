@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { products } from '../data/products.js';
+import { useProducts } from '../hooks/useProducts.js';
 import { useCart } from '../context/CartContext.jsx';
 import { Star, CheckCircle, ArrowLeft, Shield, Truck, Phone } from 'lucide-react';
 
@@ -27,13 +27,13 @@ const Rating = ({ value = 0 }) => {
 };
 
 const ProductDetail = () => {
-  // 👇 Scroll to top
-    useEffect(() => {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }, []);
-  
   const { id } = useParams();
-  const product = useMemo(() => products.find((p) => String(p.id) === String(id)), [id]);
+  const { products, loading } = useProducts();
+  const product = useMemo(() => products.find((p) => String(p.id) === String(id)), [products, id]);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
 
   const { addItem } = useCart();
 
@@ -57,6 +57,17 @@ const ProductDetail = () => {
       };
     }
   }, [product]);
+
+  if (loading) {
+    return (
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div className="text-center py-20">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading product...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!product) {
     return (

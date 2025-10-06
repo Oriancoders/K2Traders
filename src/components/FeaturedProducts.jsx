@@ -1,20 +1,36 @@
 import React, { useState } from 'react';
 import ProductCard from './ProductCard.jsx';
-import { products } from '../data/products.js';
+import { useProducts } from '../hooks/useProducts.js';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const FeaturedProducts = () => {
+  const { products, loading } = useProducts();
   const featuredProducts = products.filter((p) => p?.featured);
   const [loadedCount, setLoadedCount] = useState(0);
-
-  if (!featuredProducts.length) return null;
 
   const handleImageLoad = () => {
     setLoadedCount((prev) => prev + 1);
   };
 
   const allLoaded = loadedCount >= featuredProducts.length;
+
+  if (loading || !featuredProducts.length) {
+    return (
+      <section className="py-20 bg-gradient-to-b from-white via-green-50 to-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center py-12">
+            {loading && (
+              <>
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto"></div>
+                <p className="mt-4 text-gray-600">Loading products...</p>
+              </>
+            )}
+          </div>
+        </div>
+      </section>
+    );
+  }
   
   return (
     <section

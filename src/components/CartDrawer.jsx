@@ -3,7 +3,7 @@ import { X, Trash2, CheckCircle, ShoppingCart, ArrowLeft } from 'lucide-react';
 import { useCart } from '../context/CartContext.jsx';
 import toast from 'react-hot-toast';
 import html2canvas from 'html2canvas';
-import { submitToGoogleSheets } from '../utils/submitToGoogleSheets.js';
+import StripeCheckout from './StripeCheckout.jsx';
 
 const formatPrice = (v) => `Rs ${(Number(v) || 0).toFixed(2)}`;
 
@@ -264,26 +264,17 @@ const CartDrawer = ({ open, onClose }) => {
                         <span>{formatPrice(subtotal)}</span>
                       </div>
                     </div>
-                    <button
-                      type="submit"
-                      disabled={submitting}
-                      className="w-full rounded-xl bg-gradient-to-r from-green-500 via-emerald-500 to-green-600 px-5 py-3 font-extrabold text-white shadow-lg shadow-green-600/20 transition hover:from-green-600 hover:to-emerald-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 disabled:opacity-60 active:scale-95"
-                    >
-                      {submitting ? (
-                        <span className="flex items-center justify-center gap-2">
-                          <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
-                          </svg>
-                          Placing order...
-                        </span>
-                      ) : (
-                        <span className="flex items-center justify-center gap-2">
-                          <CheckCircle className="h-5 w-5" />
-                          Place Order
-                        </span>
-                      )}
-                    </button>
+
+                    <StripeCheckout
+                      cart={items}
+                      onSuccess={() => {
+                        const newBillId = `K2T-${Date.now()}`;
+                        setBillId(newBillId);
+                        setSubmitted(true);
+                        toast.success('Payment successful! Order placed.');
+                        clearCart();
+                      }}
+                    />
                   </form>
                 ) : (
                   <div className="flex flex-col items-center justify-center h-full py-12 animate-fade-in" aria-live="polite">

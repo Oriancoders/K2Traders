@@ -172,6 +172,7 @@ const Footer = () => {
             <a href={companyInfo.policies?.privacy || '#'} className="text-sm hover:text-white transition">Privacy</a>
             <a href={companyInfo.policies?.terms || '#'} className="text-sm hover:text-white transition">Terms</a>
             <a href={companyInfo.policies?.shipping || '#'} className="text-sm hover:text-white transition">Shipping</a>
+            <Link to="/admin/login" className="text-xs opacity-30 hover:opacity-100 transition">Admin</Link>
           </div>
         </div>
       </div>
